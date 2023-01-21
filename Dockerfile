@@ -15,12 +15,12 @@ RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     npm install -g yarn && \
     yarn -v && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*. 
 
 
 WORKDIR "/tmp"
 
-RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
+RUN npm i -g --unsafe-perm cordova@11.0.0 && \
     cordova -v && \
     cd /tmp && \
     cordova create myApp com.myCompany.myApp myApp && \
