@@ -2,7 +2,6 @@ FROM we2app/android
 
 ENV CORDOVA_VERSION 11.0.0
 
-WORKDIR "/tmp"
 
 RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
@@ -18,6 +17,8 @@ RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+
+WORKDIR "/tmp"
 
 RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
     cordova -v && \
