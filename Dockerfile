@@ -24,8 +24,7 @@ RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
     cd /tmp && \
     cordova create myApp com.myCompany.myApp myApp && \
     cd myApp
-RUN cordova plugin add cordova-plugin-camera --save && \
-    cordova platform add android --save && \
+RUN cordova platform add android --save && \
     cordova requirements android && \
     cordova build android --verbose && \
     rm -rf /tmp/myApp
