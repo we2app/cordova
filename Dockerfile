@@ -39,6 +39,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install Android SDK
 RUN apt-get update && \
     apt-get -y install unzip && \
     wget -q https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip && \
@@ -48,7 +49,10 @@ RUN apt-get update && \
     mkdir -p /opt/android-sdk/cmdline-tools/latest && \
     mv /opt/android-sdk/cmdline-tools/* /opt/android-sdk/cmdline-tools/latest | mkdir latest && \
     yes | /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses && \
-    /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.2" "extras;android;m2repository" "extras;google;m2repository" && \
+    /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "extras;android;m2repository" "extras;google;m2repository" && \
+    export ANDROID_HOME=/opt/android-sdk && \
+    export ANDROID_SDK_ROOT=/opt/android-sdk && \
+    export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools && \
     echo "export ANDROID_HOME=/opt/android-sdk" >> ~/.bashrc && \
     echo "export ANDROID_SDK_ROOT=/opt/android-sdk" >> ~/.bashrc && \
     echo "export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools" >> ~/.bashrc
