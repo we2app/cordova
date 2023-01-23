@@ -60,6 +60,9 @@ RUN apt-get update && \
 WORKDIR "/tmp"
 
 RUN npm i -g --unsafe-perm cordova@11.0.0 && \
+    export ANDROID_HOME=/opt/android-sdk && \
+    export ANDROID_SDK_ROOT=/opt/android-sdk && \
+    export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools && \
     cordova -v && \
     cd /tmp && \
     cordova create myApp com.myCompany.myApp myApp && \
