@@ -2,7 +2,7 @@ name: Docker Image
 
 on:
   push:
-    branches: main
+    branches: cordova_11
 
 env:
   platforms: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/s390x,linux/ppc64le,linux/riscv64
@@ -41,5 +41,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            we2app/${{ github.event.repository.name }}:latest
             we2app/${{ github.event.repository.name }}:11.0.0
