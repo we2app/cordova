@@ -25,12 +25,12 @@ ENV CORDOVA_VERSION=12.0.0 \
     CORDOVA_BUILD_TOOLS_VERSION=33.0.2 \
     ANDROID_HOME=/opt/android
 
+RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
+    cordova -v
+
 WORKDIR "/tmp"
 
-RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
-    cordova -v && \
-    cd /tmp && \
-    cordova create myApp com.myCompany.myApp myApp && \
+RUN cordova create myApp com.myCompany.myApp myApp && \
     cd myApp && \
     cordova plugin add cordova-plugin-camera --save && \
     cordova platform add android --save && \
