@@ -1,4 +1,4 @@
-FROM we2app/android:34.0.0
+FROM we2app/android:33.0.2
 
 LABEL maintainer="atik@we2app.com" \
       org.label-schema.schema-version="1.0" \
@@ -38,15 +38,6 @@ RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
     cordova build android --verbose && \
     rm -rf /tmp/myApp && \
     rm -rf /opt/android/licenses
-
-# demo app
-# RUN cordova create myApp com.myCompany.myApp myApp && \
-#     cd myApp && \
-#     cordova platform add android --save && \
-#     cordova requirements android && \
-#     cordova build android --verbose && \
-#     rm -rf /tmp/myApp
-
 
 
 
