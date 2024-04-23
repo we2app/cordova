@@ -9,7 +9,7 @@ LABEL maintainer="atik@we2app.com" \
 RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     apt-key fingerprint 1655A0AB68576280 && \
-    export VERSION=node_14.x && \
+    export VERSION=node_18.x && \
     export DISTRO="$(lsb_release -s -c)" && \
     echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | tee /etc/apt/sources.list.d/nodesource.list && \
     echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | tee -a /etc/apt/sources.list.d/nodesource.list && \
@@ -20,27 +20,32 @@ RUN apt-get update && apt-get install -y curl gnupg2 lsb-release && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ENV CORDOVA_VERSION=12.0.0 \
+    CORDOVA_BUILD_TOOLS_VERSION=33.0.2 \
+    ANDROID_HOME=/opt/android
+
 WORKDIR "/tmp"
 
-RUN npm i -g --unsafe-perm cordova@11.0.0 && \
-    export ANDROID_HOME=/opt/android-sdk && \
-    export ANDROID_SDK_ROOT=/opt/android-sdk && \
-    export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools && \
+RUN while true; do echo 'y'; sleep 2; done | sdkmanager "build-tools;${CORDOVA_BUILD_TOOLS_VERSION}" && \
+    npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
     cordova -v && \
     cd /tmp && \
     cordova create myApp com.myCompany.myApp myApp && \
     cd myApp && \
+    cordova plugin add cordova-plugin-camera --save && \
     cordova platform add android --save && \
     cordova requirements android && \
     cordova build android --verbose && \
-    rm -rf /tmp/myApp
+    rm -rf /tmp/myApp && \
+    rm -rf /opt/android/licenses
 
-
-
-
-
-
-
+# demo app
+# RUN cordova create myApp com.myCompany.myApp myApp && \
+#     cd myApp && \
+#     cordova platform add android --save && \
+#     cordova requirements android && \
+#     cordova build android --verbose && \
+#     rm -rf /tmp/myApp
 
 
 
