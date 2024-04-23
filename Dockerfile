@@ -30,6 +30,13 @@ RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION} && \
 
 WORKDIR "/tmp"
 
+RUN cordova create myApp com.myCompany.myApp myApp && \
+    cd myApp && \
+    cordova platform add android --save && \
+    cordova requirements android && \
+    cordova build android --verbose && \
+    rm -rf /tmp/myApp
+
 
 
 
