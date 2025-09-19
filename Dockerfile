@@ -32,14 +32,17 @@ ENV ANDROID_SDK_URL="https://dl.google.com/android/repository/commandlinetools-l
 ENV CORDOVA_VERSION=12.0.0 \
     CORDOVA_BUILD_TOOLS_VERSION=35.0.0
 
-# Update PATH to include all the new tool binaries
-ENV PATH $PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$ANT_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin
+# Set NVM environment variables
+ENV NVM_DIR="/root/.nvm"
+ENV NVM_SYMLINK_CURRENT=true
+
+# Update PATH to include all tool binaries, including the nvm symlink for Node.js
+ENV PATH $PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$ANT_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin:$NVM_DIR/current/bin
 
 # =========================================================================
 # === System Dependencies & JDK Installation
 # =========================================================================
 # Update, upgrade, and install all required packages in a single layer
-# This combines dependencies from the jdk, android, and cordova files.
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get -y install \
@@ -81,19 +84,15 @@ RUN chmod a+x -R $ANDROID_SDK_ROOT && \
     chown -R root:root $ANDROID_SDK_ROOT
 
 # =========================================================================
-# === NodeJS & Cordova Installation (from Dockerfile_cordova)
+# === NodeJS & Cordova Installation
 # =========================================================================
-# Add NodeSource repository using the current recommended method and install NodeJS 22.x
-RUN apt-get update && apt-get install -y gpg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    apt-get install -y nodejs && \
-    npm install -g yarn
-
-# Install Cordova globally using npm
-RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION}
+# Install nvm, Node.js v22, enable Yarn, and install Cordova in a single layer
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && \
+    . "$NVM_DIR/nvm.sh" && \
+    nvm install 22 && \
+    nvm alias default 22 && \
+    corepack enable yarn && \
+    npm i -g --unsafe-perm cordova@${CORDOVA_VERSION}
 
 # =========================================================================
 # === Verification & Cleanup
