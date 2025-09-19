@@ -11,7 +11,7 @@ LABEL maintainer="atik@we2app.com" \
 
 # Set non-interactive frontend to prevent prompts during package installations
 ENV DEBIAN_FRONTEND=noninteractive \
-    [cite_start]TERM=xterm [cite: 19]
+    TERM=xterm
 
 # =========================================================================
 # === Environment Variables
@@ -26,11 +26,11 @@ ENV ANDROID_SDK_URL="https://dl.google.com/android/repository/commandlinetools-l
     MAVEN_HOME="/usr/share/maven" \
     GRADLE_HOME="/usr/share/gradle" \
     ANDROID_SDK_ROOT="/opt/android" \
-    [cite_start]ANDROID_HOME="/opt/android/sdk" [cite: 1]
+    ANDROID_HOME="/opt/android/sdk"
 
 # Set Cordova variables (from Dockerfile_cordova)
 ENV CORDOVA_VERSION=12.0.0 \
-    [cite_start]CORDOVA_BUILD_TOOLS_VERSION=33.0.2 [cite: 10]
+    CORDOVA_BUILD_TOOLS_VERSION=33.0.2
 
 # Update PATH to include all the new tool binaries
 ENV PATH $PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$ANT_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin
@@ -66,7 +66,7 @@ RUN mkdir android && cd android && \
     unzip tools.zip && rm tools.zip && \
     cd cmdline-tools && \
     mkdir latest && \
-    [cite_start]ls | grep -v latest | xargs mv -t latest [cite: 1, 2, 3]
+    ls | grep -v latest | xargs mv -t latest 
 
 # Accept SDK licenses and install Android components
 RUN mkdir -p /root/.android && touch /root/.android/repositories.cfg && \
@@ -74,7 +74,7 @@ RUN mkdir -p /root/.android && touch /root/.android/repositories.cfg && \
     while true; do echo 'y'; sleep 2; done | sdkmanager "platforms;android-28" "platforms;android-29" "platforms;android-30" && \
     while true; do echo 'y'; sleep 2; done | sdkmanager "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-34" && \
     while true; do echo 'y'; sleep 2; done | sdkmanager "extras;android;m2repository" "extras;google;google_play_services" "extras;google;instantapps" "extras;google;m2repository" && \
-    [cite_start]while true; do echo 'y'; sleep 2; done | sdkmanager "add-ons;addon-google_apis-google-22" "add-ons;addon-google_apis-google-23" "add-ons;addon-google_apis-google-24" "skiaparser;1" "skiaparser;2" "skiaparser;3" [cite: 4, 5, 6, 7, 8]
+    while true; do echo 'y'; sleep 2; done | sdkmanager "add-ons;addon-google_apis-google-22" "add-ons;addon-google_apis-google-23" "add-ons;addon-google_apis-google-24" "skiaparser;1" "skiaparser;2" "skiaparser;3" 
 
 # Set permissions for the Android SDK directory
 RUN chmod a+x -R $ANDROID_SDK_ROOT && \
@@ -91,7 +91,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key ad
     echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | tee -a /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
     apt-get install -y nodejs && \
-    [cite_start]npm install -g yarn [cite: 11, 12, 13]
+    npm install -g yarn 
 
 # Install Cordova globally using npm
 RUN npm i -g --unsafe-perm cordova@${CORDOVA_VERSION}
@@ -115,7 +115,7 @@ RUN cordova create myApp com.myCompany.myApp myApp && \
     cd myApp && \
     cordova platform add android --save && \
     cordova requirements android && \
-    [cite_start]cordova build android --verbose [cite: 14]
+    cordova build android --verbose 
 
 # Final cleanup of temporary files and package caches
 RUN apt-get autoremove -y && \
