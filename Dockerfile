@@ -26,7 +26,7 @@ ENV ANDROID_SDK_URL="https://dl.google.com/android/repository/commandlinetools-l
     MAVEN_HOME="/usr/share/maven" \
     GRADLE_HOME="/usr/share/gradle" \
     ANDROID_SDK_ROOT="/opt/android" \
-    ANDROID_HOME="/opt/android/sdk"
+    ANDROID_HOME="/opt/android"
 
 # Set Cordova variables (from Dockerfile_cordova)
 ENV CORDOVA_VERSION=12.0.0 \
